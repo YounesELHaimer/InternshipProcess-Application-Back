@@ -16,5 +16,5 @@ public interface EtudiantService {
     public Etudiant updateEtudiant(int id , Etudiant etudiant);
 
     public void deleteEtudiant(int id);
-    void importEtudiantsFromCSV(MultipartFile file);
+    void importEtudiantsFromCSV(MultipartFile file , Long filiereId);
 }

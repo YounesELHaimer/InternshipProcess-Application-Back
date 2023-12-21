@@ -30,6 +30,11 @@ public class Etudiant {
         @Column(nullable = false)
         private String CIN;
 
+        @Column(nullable = false)
+        private String Niveau;
+
+
+
         public Etudiant() {
 
         }
@@ -74,14 +79,22 @@ public class Etudiant {
         }
 
 
-        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, Filiere filiere) {
+        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, Filiere filiere , String Niveau) {
                 this.id = id;
                 Nom = nom;
                 Prenom = prenom;
                 this.CNE = CNE;
                 this.email = email;
                 this.CIN = CIN;
-
+                this.Niveau = Niveau;
                 this.filiere = filiere;
+        }
+
+        public String getNiveau() {
+                return Niveau;
+        }
+
+        public void setNiveau(String niveau) {
+                Niveau = niveau;
         }
 }

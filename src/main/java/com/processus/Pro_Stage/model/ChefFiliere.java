@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.UUID;
+
+
+
 @Getter
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -17,6 +21,9 @@ public class ChefFiliere {
     @Column(nullable = false)
     private String nom;
 
+    @Column(nullable = false)
+    private String motDePasse;
+
     // Relation One-to-One avec Filiere
     @OneToOne(mappedBy = "chefFiliere")
     private Filiere filiere;
@@ -24,11 +31,12 @@ public class ChefFiliere {
     // Constructors, getters, and setters
 
     public ChefFiliere() {
-        // Default constructor
+        this.motDePasse = generateRandomPassword();
     }
 
     public ChefFiliere(String nom) {
         this.nom = nom;
+        this.motDePasse = generateRandomPassword();
     }
 
     // Getters and setters
@@ -43,5 +51,12 @@ public class ChefFiliere {
 
     public void setFiliere(Filiere filiere) {
         this.filiere = filiere;
+    }
+
+    // Générer un mot de passe aléatoire
+    private String generateRandomPassword() {
+        // Utilisation de UUID pour générer un mot de passe aléatoire
+        // Vous pouvez ajuster la longueur selon vos besoins
+        return UUID.randomUUID().toString().substring(0, 12);
     }
 }
