@@ -1,7 +1,10 @@
 package com.processus.Pro_Stage.service;
 
 import com.processus.Pro_Stage.model.Etudiant;
+import com.processus.Pro_Stage.model.Filiere;
 import com.processus.Pro_Stage.repository.EtudiantRepository;
+import com.processus.Pro_Stage.repository.FiliereRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +19,8 @@ public class EtudiantServiceImpl implements EtudiantService {
 
     @Autowired
     private EtudiantRepository etudiantRepository;
+    @Autowired
+    private FiliereRepository filiereRepository;
 
     @Override
     public Etudiant addEtudiant(Etudiant Etudiant) {
@@ -49,8 +54,9 @@ public class EtudiantServiceImpl implements EtudiantService {
     public void deleteEtudiant(int id) {
         etudiantRepository.deleteById(id);
     }
+    @Transactional
     @Override
-    public void importEtudiantsFromCSV(MultipartFile file) {
+    public void importEtudiantsFromCSV(MultipartFile file, Long filiereId) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
             // Skip the header row
@@ -67,11 +73,21 @@ public class EtudiantServiceImpl implements EtudiantService {
                 etudiant.setCNE(data[3]);
                 etudiant.setCIN(data[4]);
 
+                // Set the filière ID
+                Filiere filiere = filiereRepository.findById(filiereId)
+                        .orElseThrow(() -> new RuntimeException("Filière not found")); // Handle this exception according to your needs
+                etudiant.setFiliere(filiere);
+
                 // Save the etudiant to the database
                 etudiantRepository.save(etudiant);
             }
         } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your requirements
+            // Handle the exception or log it
+            throw new RuntimeException("Error reading CSV file", e);
+        } catch (Exception e) {
+            // Handle the exception or log it
+            throw new RuntimeException("Error importing students", e);
         }
     }
+
 }
