@@ -3,6 +3,7 @@ package com.processus.Pro_Stage.controller;
 import com.processus.Pro_Stage.model.ChefFiliere;
 import com.processus.Pro_Stage.model.Etudiant;
 import com.processus.Pro_Stage.model.Filiere;
+import com.processus.Pro_Stage.model.Stage;
 import com.processus.Pro_Stage.service.ChefFiliereService;
 import com.processus.Pro_Stage.service.EtudiantService;
 import com.processus.Pro_Stage.service.FiliereService;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -80,7 +82,32 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+    @GetMapping("/{filiereId}/stages")
+    public ResponseEntity<?> getStagesByFiliereId(@PathVariable Long filiereId) {
+        try {
+            // Récupérer la filière à partir de l'ID
+            Filiere filiere = filiereService.findById(filiereId);
 
+            // Vérifier si la filière existe
+            if (filiere != null) {
+                // Récupérer les étudiants de la filière
+                Set<Etudiant> etudiants = filiere.getEtudiants();
+
+                // Récupérer les stages des étudiants
+                List<Stage> stages = etudiants.stream()
+                        .map(Etudiant::getStages)
+                        .flatMap(Set::stream)
+                        .collect(Collectors.toList());
+
+                return ResponseEntity.ok(stages);
+            } else {
+                // Gérer le cas où la filière n'existe pas
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La filière n'existe pas.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     @PostMapping("/add/{filiereId}")
     public ResponseEntity<?> addEtudiant(@PathVariable Long filiereId, @RequestBody Etudiant etudiant) {
         try {
