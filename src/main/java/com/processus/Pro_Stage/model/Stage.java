@@ -22,7 +22,7 @@ public class Stage {
     private String sujet;
 
     @Column(nullable = false)
-    private String organismeDacceil;
+    private String organismeDaccueil;
 
     @Column(nullable = false)
     private String type;
@@ -57,9 +57,9 @@ public class Stage {
         // Default constructor
     }
 
-    public Stage(String sujet, String organismeDacceil, String type, Date dateDeDebut, Date dateFin, Etudiant etudiant, Professeur encadrant, Set<Professeur> jurys) {
+    public Stage(String sujet, String organismeDaccueil, String type, Date dateDeDebut, Date dateFin, Etudiant etudiant, Professeur encadrant, Set<Professeur> jurys) {
         this.sujet = sujet;
-        this.organismeDacceil = organismeDacceil;
+        this.organismeDaccueil = organismeDaccueil;
         this.type = type;
         this.dateDeDebut = dateDeDebut;
         this.dateFin = dateFin;
@@ -84,8 +84,8 @@ public class Stage {
         this.sujet = sujet;
     }
 
-    public void setOrganismeDacceil(String organismeDacceil) {
-        this.organismeDacceil = organismeDacceil;
+    public void setorganismeDaccueil(String organismeDaccueil) {
+        this.organismeDaccueil = organismeDaccueil;
     }
 
     public void setType(String type) {
