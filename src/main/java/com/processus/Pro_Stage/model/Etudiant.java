@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -20,7 +21,6 @@ public class Etudiant {
         @Column(nullable = false)
         private String Prenom;
 
-
         @Column(nullable = false)
         private String CNE;
 
@@ -32,6 +32,9 @@ public class Etudiant {
 
         @Column(nullable = false)
         private String Niveau;
+
+        @Column(nullable = false)
+        private String motDePasse;
 
 
 
@@ -58,6 +61,8 @@ public class Etudiant {
         public void setEmail(String email) {
                 this.email = email;
         }
+
+
 
         public void setCIN(String CIN) {
                 this.CIN = CIN;
@@ -88,6 +93,7 @@ public class Etudiant {
                 this.CIN = CIN;
                 this.Niveau = Niveau;
                 this.filiere = filiere;
+                this.motDePasse = generateRandomPassword();
         }
 
         public String getNiveau() {
@@ -96,5 +102,9 @@ public class Etudiant {
 
         public void setNiveau(String niveau) {
                 Niveau = niveau;
+        }
+
+        private String generateRandomPassword() {
+                return UUID.randomUUID().toString().substring(0, 12);
         }
 }
