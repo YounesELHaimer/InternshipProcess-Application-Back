@@ -16,8 +16,8 @@ public class ChefFiliereServiceImpl implements ChefFiliereService {
     }
 
     @Override
-    public ChefFiliere login(String nom, String motDePasse) {
-        return chefFiliereRepository.findByNomAndMotDePasse(nom, motDePasse);
+    public ChefFiliere login(String email, String motDePasse) {
+        return chefFiliereRepository.findChefFiliereByEmailAndMotDePasse(email, motDePasse);
     }
 
     // Implement other methods if needed

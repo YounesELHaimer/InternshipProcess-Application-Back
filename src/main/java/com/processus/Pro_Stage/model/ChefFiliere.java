@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -14,12 +15,22 @@ import java.util.UUID;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ChefFiliere {
 
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false)
     private String nom;
+
+    @Setter
+    @Column(nullable = false)
+    private String prenom;
+
+    @Setter
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private String motDePasse;
@@ -34,24 +45,20 @@ public class ChefFiliere {
         this.motDePasse = generateRandomPassword();
     }
 
-    public ChefFiliere(String nom) {
+    public ChefFiliere(String nom, String prenom, String email) {
         this.nom = nom;
+        this.prenom = prenom;
         this.motDePasse = generateRandomPassword();
+        this.email = email;
     }
 
     // Getters and setters
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
 
     public void setFiliere(Filiere filiere) {
         this.filiere = filiere;
     }
+
 
     // Générer un mot de passe aléatoire
     private String generateRandomPassword() {

@@ -2,11 +2,13 @@ package com.processus.Pro_Stage.controller;
 
 import com.processus.Pro_Stage.model.ChefFiliere;
 import com.processus.Pro_Stage.model.Etudiant;
+import com.processus.Pro_Stage.model.Stage;
 import com.processus.Pro_Stage.model.Filiere;
 import com.processus.Pro_Stage.model.Stage;
 import com.processus.Pro_Stage.service.ChefFiliereService;
 import com.processus.Pro_Stage.service.EtudiantService;
 import com.processus.Pro_Stage.service.FiliereService;
+import com.processus.Pro_Stage.service.StageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,9 @@ public class ClientController {
     @Autowired
     private ChefFiliereService chefFiliereService;
 
+    @Autowired
+    private StageService stageService;
+
 
 
     @GetMapping("/{id}")
@@ -38,8 +43,19 @@ public class ClientController {
         return filiereService.findById(id);
     }
     @PostMapping("/login")
-    public ChefFiliere login(@RequestBody ChefFiliere loginRequest) {
-        return chefFiliereService.login(loginRequest.getNom(), loginRequest.getMotDePasse());
+    public ResponseEntity<?> login(@RequestBody ChefFiliere loginRequest) {
+        try {
+            ChefFiliere chefFiliere = chefFiliereService.login(loginRequest.getEmail(), loginRequest.getMotDePasse());
+            return ResponseEntity.ok(chefFiliere);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed. Please check your credentials.");
+        }
+    }
+
+    @PostMapping("/loginEtudiant")
+    public Etudiant loginEtudiant(@RequestBody Etudiant loginRequest) {
+        return etudiantService.loginEtudiant(loginRequest.getEmail(), loginRequest.getMotDePasse());
     }
 
     @GetMapping("/{id}/etudiants")
@@ -52,13 +68,13 @@ public class ClientController {
             return Collections.emptySet();
         }
     }
-    @GetMapping("/Etudiants")
+    @GetMapping("/etudiants")
     public List<Etudiant> getEtudiants() {
         System.out.println("Etudiants..");
         return etudiantService.getEtudiant();
     }
 
-    @GetMapping("/Etudiant/{id}")
+    @GetMapping("/etudiant/{id}")
     public Etudiant getEtudiantById(@PathVariable("id") int id) {
         return etudiantService.getEtudiantByid(id);
     }
@@ -140,5 +156,11 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @GetMapping("stages/etudiant/{etudiantId}")
+    public List<Stage> getStagesByEtudiantId(@PathVariable("etudiantId") int id) {
+        return stageService.getStagesByEtudiantId(id);
+    }
+
 
 }

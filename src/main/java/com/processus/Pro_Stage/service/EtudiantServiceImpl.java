@@ -1,7 +1,9 @@
 package com.processus.Pro_Stage.service;
 
+import com.processus.Pro_Stage.model.ChefFiliere;
 import com.processus.Pro_Stage.model.Etudiant;
 import com.processus.Pro_Stage.model.Filiere;
+import com.processus.Pro_Stage.repository.ChefFiliereRepository;
 import com.processus.Pro_Stage.repository.EtudiantRepository;
 import com.processus.Pro_Stage.repository.FiliereRepository;
 import jakarta.transaction.Transactional;
@@ -23,6 +25,11 @@ public class EtudiantServiceImpl implements EtudiantService {
     private FiliereRepository filiereRepository;
 
     @Override
+    public Etudiant loginEtudiant(String email, String motDePasse) {
+        return etudiantRepository.findEtudiantByEmailAndMotDePasse(email, motDePasse);
+    }
+
+    @Override
     public Etudiant addEtudiant(Etudiant Etudiant) {
         return etudiantRepository.save(Etudiant);
     }
@@ -34,7 +41,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
     @Override
     public Etudiant getEtudiantByid(int id) {
-        return etudiantRepository.findById(id).get();
+        return etudiantRepository.findEtudiantById(id);
     }
 
     @Override
