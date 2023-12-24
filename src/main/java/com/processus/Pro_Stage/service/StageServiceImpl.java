@@ -13,16 +13,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StageServiceImpl implements StageService{
 
     @Autowired
     private StageRepository stageRepository;
     @Override
-    public List<Stage> getAllStagesByEtudiantId(int id){
-        return stageRepository.findAllStagesByEtudiantId(id);
+    public List<Stage> getStagesByEtudiantId(int id){
+        return stageRepository.findStagesByEtudiantId(id);
     };
 
+    @Override
     public Stage addStage(Stage stage) {
         return stageRepository.save(stage);
     }
@@ -38,6 +41,7 @@ public class StageServiceImpl implements StageService{
         return stageRepository.countByAnneeAndEtudiantFiliereIdAndEncadrantIsNull(year, filiereId);
     }
 
+    @Override
     public void assignStagesToEncadrants(List<Long> encadrantIds, String year, Long filiereId) {
         // Get the total number of stages for the given year and filiereId
         long totalStages = stageRepository.countByAnneeAndEtudiantFiliereId(year, filiereId);
@@ -70,6 +74,21 @@ public class StageServiceImpl implements StageService{
             stageRepository.saveAll(stages);
 
             startIndex = endIndex;
+        }
+    }
+
+    @Override
+    public void updateStage(Long id, Stage updatedStage) {
+        Optional<Stage> existingStage = stageRepository.findById(id);
+        if (existingStage.isPresent()) {
+            Stage stage1 = stageRepository.findById(id).get();
+            stage1.setType(updatedStage.getType());
+            stage1.setSujet(updatedStage.getSujet());
+            stage1.setorganismeDaccueil(updatedStage.getOrganismeDaccueil());
+            stage1.setAnnee(updatedStage.getAnnee());
+            stage1.setDateDeDebut(updatedStage.getDateDeDebut());
+            stage1.setDateFin(updatedStage.getDateFin());
+            stageRepository.save(stage1);
         }
     }
 

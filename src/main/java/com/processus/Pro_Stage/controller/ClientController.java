@@ -84,6 +84,11 @@ public class ClientController {
         }
     }
 
+    @PutMapping("stage/{stageId}")
+    public void updateStage(@PathVariable Long stageId, @RequestBody Stage stage) {
+        stageService.updateStage(stageId, stage);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteEtudiant(@PathVariable("id") int id) {
         try {
@@ -154,8 +159,9 @@ public class ClientController {
 
     @GetMapping("stages/etudiant/{etudiantId}")
     public List<Stage> getStagesByEtudiantId(@PathVariable("etudiantId") int id) {
-        return stageService.getAllStagesByEtudiantId(id);
+        return stageService.getStagesByEtudiantId(id);
     }
+
 
     @PostMapping("/add/stage/{etudiantId}")
     public ResponseEntity<?> addStage(@PathVariable int etudiantId, @RequestBody Stage stage) {
