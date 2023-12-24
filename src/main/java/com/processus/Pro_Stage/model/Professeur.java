@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 @Getter
+@Setter
 @Entity
 public  class Professeur {
 
@@ -15,7 +17,16 @@ public  class Professeur {
     private Long id;
 
     @Column(nullable = false)
-    private String nomComplet;
+    private String nom;
+
+    @Column(nullable = false)
+    private String prenom;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String departement;
 
     // Autres champs et relations communs à tous les professeurs
 
@@ -25,15 +36,11 @@ public  class Professeur {
     public Professeur() {
     }
 
-    public Professeur(String nomComplet) {
-        this.nomComplet = nomComplet;
-    }
-
-    public void setId(Long id) {
+    public Professeur(Long id, String nom, String prenom, String email, String departement) {
         this.id = id;
-    }
-
-    public void setNomComplet(String nomComplet) {
-        this.nomComplet = nomComplet;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.departement = departement;
     }
 }
