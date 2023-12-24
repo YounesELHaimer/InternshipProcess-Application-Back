@@ -1,5 +1,6 @@
 package com.processus.Pro_Stage.service;
 
+import com.processus.Pro_Stage.model.Etudiant;
 import com.processus.Pro_Stage.model.Stage;
 import com.processus.Pro_Stage.repository.StageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,12 @@ public class StageServiceImpl implements StageService{
 
     @Autowired
     private StageRepository stageRepository;
-
-    public List<Stage> getStagesByEtudiantId(int id){
-        return stageRepository.findStagesByEtudiantId(id);
+    @Override
+    public List<Stage> getAllStagesByEtudiantId(int id){
+        return stageRepository.findAllStagesByEtudiantId(id);
     };
 
+    public Stage addStage(Stage stage) {
+        return stageRepository.save(stage);
+    }
 }

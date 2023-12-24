@@ -1,12 +1,15 @@
 package com.processus.Pro_Stage.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 @Table
 public class Etudiant {
@@ -42,67 +45,27 @@ public class Etudiant {
 
         }
 
-        public void setId(int id) {
+        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, String niveau, String motDePasse, Set<Stage> stages, Filiere filiere) {
                 this.id = id;
-        }
-
-        public void setNom(String nom) {
                 Nom = nom;
-        }
-
-        public void setPrenom(String prenom) {
                 Prenom = prenom;
-        }
-
-        public void setCNE(String CNE) {
                 this.CNE = CNE;
-        }
-
-        public void setEmail(String email) {
                 this.email = email;
-        }
-
-
-
-        public void setCIN(String CIN) {
                 this.CIN = CIN;
+                Niveau = niveau;
+                this.motDePasse = motDePasse;
+                this.stages = stages;
+                this.filiere = filiere;
         }
-        // Ajoutez la relation avec la classe Stage
+
+        @JsonIdentityReference(alwaysAsId = true)
         @OneToMany(mappedBy = "etudiant")
         private Set<Stage> stages;
-        // Ajout de la relation Many-to-One avec Filiere
+
         @ManyToOne
         @JoinColumn(name = "filiere_id")
         private Filiere filiere;
 
-        public void setFiliere(Filiere filiere) {
-                this.filiere = filiere;
-        }
-
-        public void setStages(Set<Stage> stages) {
-                this.stages = stages;
-        }
-
-
-        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, Filiere filiere , String Niveau) {
-                this.id = id;
-                Nom = nom;
-                Prenom = prenom;
-                this.CNE = CNE;
-                this.email = email;
-                this.CIN = CIN;
-                this.Niveau = Niveau;
-                this.filiere = filiere;
-                this.motDePasse = generateRandomPassword();
-        }
-
-        public String getNiveau() {
-                return Niveau;
-        }
-
-        public void setNiveau(String niveau) {
-                Niveau = niveau;
-        }
 
         private String generateRandomPassword() {
                 return UUID.randomUUID().toString().substring(0, 12);

@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface StageRepository extends JpaRepository<Stage, Long>{
 
-    List<Stage> findStagesByEtudiantId(int etudiantId);
+    List<Stage> findAllStagesByEtudiantId(int etudiantId);
 
 }

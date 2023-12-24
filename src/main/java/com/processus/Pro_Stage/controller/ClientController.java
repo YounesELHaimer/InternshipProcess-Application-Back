@@ -159,7 +159,25 @@ public class ClientController {
 
     @GetMapping("stages/etudiant/{etudiantId}")
     public List<Stage> getStagesByEtudiantId(@PathVariable("etudiantId") int id) {
-        return stageService.getStagesByEtudiantId(id);
+        return stageService.getAllStagesByEtudiantId(id);
+    }
+
+    @PostMapping("/add/stage/{etudiantId}")
+    public ResponseEntity<?> addStage(@PathVariable int etudiantId, @RequestBody Stage stage) {
+        try {
+            Etudiant etudiant = etudiantService.getEtudiantByid(etudiantId);
+
+            if (etudiant != null) {
+                stage.setEtudiant(etudiant);
+                stageService.addStage(stage);
+
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'etudiant n'existe pas.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 

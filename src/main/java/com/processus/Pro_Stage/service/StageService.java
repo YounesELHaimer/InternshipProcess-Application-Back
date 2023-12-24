@@ -10,5 +10,8 @@ import java.util.List;
 
 @Service
 public interface StageService {
-    public List<Stage> getStagesByEtudiantId(int id);
+    public Stage addStage(Stage stage);
+
+
+    public List<Stage> getAllStagesByEtudiantId(int id);
 }
