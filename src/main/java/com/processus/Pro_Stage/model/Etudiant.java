@@ -39,6 +39,8 @@ public class Etudiant {
         @Column(nullable = false)
         private String motDePasse;
 
+        @Column(nullable = false)
+        private String codeApogee;
 
 
         public Etudiant() {
@@ -57,7 +59,6 @@ public class Etudiant {
                 this.stages = stages;
                 this.filiere = filiere;
         }
-
         @JsonIdentityReference(alwaysAsId = true)
         @OneToMany(mappedBy = "etudiant")
         private Set<Stage> stages;
@@ -66,6 +67,33 @@ public class Etudiant {
         @JoinColumn(name = "filiere_id")
         private Filiere filiere;
 
+        public void setFiliere(Filiere filiere) {
+                this.filiere = filiere;
+        }
+
+        public void setStages(Set<Stage> stages) {
+                this.stages = stages;
+        }
+
+
+        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, Filiere filiere , String codeApogee, String Niveau) {
+                this.id = id;
+                Nom = nom;
+                Prenom = prenom;
+                this.CNE = CNE;
+                this.email = email;
+                this.CIN = CIN;
+                this.Niveau = Niveau;
+                this.filiere = filiere;
+                this.motDePasse = generateRandomPassword();
+                this.codeApogee = codeApogee;
+        }
+
+
+
+        public void setNiveau(String niveau) {
+                Niveau = niveau;
+        }
 
         private String generateRandomPassword() {
                 return UUID.randomUUID().toString().substring(0, 12);

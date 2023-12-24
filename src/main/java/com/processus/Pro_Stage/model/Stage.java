@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@Setter
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Stage {
@@ -26,6 +28,9 @@ public class Stage {
 
     @Column(nullable = false)
     private String type;
+
+    @Column(nullable = false)
+    private String annee;
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
@@ -57,7 +62,7 @@ public class Stage {
         // Default constructor
     }
 
-    public Stage(String sujet, String organismeDaccueil, String type, Date dateDeDebut, Date dateFin, Etudiant etudiant, Professeur encadrant, Set<Professeur> jurys) {
+    public Stage(String sujet, String organismeDaccueil, String type,String annee, Date dateDeDebut, Date dateFin, Etudiant etudiant, Professeur encadrant, Set<Professeur> jurys) {
         this.sujet = sujet;
         this.organismeDaccueil = organismeDaccueil;
         this.type = type;
@@ -66,6 +71,7 @@ public class Stage {
         this.etudiant = etudiant;
         this.encadrant = encadrant;
         this.jurys = jurys;
+        this.annee = annee;
     }
 
     public void setEncadrant(Professeur encadrant) {
