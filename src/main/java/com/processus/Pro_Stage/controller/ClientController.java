@@ -1,20 +1,15 @@
 package com.processus.Pro_Stage.controller;
 
-import com.processus.Pro_Stage.model.ChefFiliere;
-import com.processus.Pro_Stage.model.Etudiant;
+import com.processus.Pro_Stage.model.*;
 import com.processus.Pro_Stage.model.Stage;
-import com.processus.Pro_Stage.model.Filiere;
-import com.processus.Pro_Stage.model.Stage;
-import com.processus.Pro_Stage.service.ChefFiliereService;
-import com.processus.Pro_Stage.service.EtudiantService;
-import com.processus.Pro_Stage.service.FiliereService;
-import com.processus.Pro_Stage.service.StageService;
+import com.processus.Pro_Stage.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -161,6 +156,63 @@ public class ClientController {
     public List<Stage> getStagesByEtudiantId(@PathVariable("etudiantId") int id) {
         return stageService.getStagesByEtudiantId(id);
     }
+    @Autowired
+    private ProfesseurService professeurService;
 
+    @GetMapping("professeurs")
+    public List<Professeur> getAllProfesseurs() {
+        return professeurService.getAllProfesseurs();
+    }
+
+
+    @GetMapping("professeurs/{id}")
+    public Professeur getProfesseurById(@PathVariable Long id) {
+        return professeurService.getProfesseurById(id);
+    }
+
+    @PostMapping("addprofesseurs")
+    public Professeur addProfesseur(@RequestBody Professeur professeur) {
+        return professeurService.addProfesseur(professeur);
+    }
+
+    @PutMapping("professeurs/{id}")
+    public void updateProfesseur(@PathVariable Long id, @RequestBody Professeur professeur) {
+        professeurService.updateProfesseur(id, professeur);
+    }
+
+    @DeleteMapping("professeurs/{id}")
+    public void deleteProfesseur(@PathVariable Long id) {
+        professeurService.deleteProfesseur(id);
+    }
+
+    @PostMapping("professeurs/import")
+    public void importProfesseurs(@RequestParam("file") MultipartFile file) throws IOException {
+        professeurService.importProfesseurs(file);
+    }
+
+    @PostMapping("stages/assign/{filiereId}")
+    public ResponseEntity<String> assignStagesToEncadrants(@PathVariable Long filiereId, @RequestParam List<Long> encadrantIds, @RequestParam String year) {
+        try {
+            stageService.assignStagesToEncadrants(encadrantIds, year, filiereId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @GetMapping("/stages/count/{filiereId}")
+    public ResponseEntity<Long> countStagesByYearAndFiliereId(
+            @RequestParam String year,
+            @PathVariable Long filiereId) {
+        long count = stageService.countStagesByYearAndFiliereId(year, filiereId);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/stages/count/null-encadrant/{filiereId}")
+    public ResponseEntity<Long> countStagesByYearAndFiliereIdAndEncadrantIsNull(
+            @RequestParam String year,
+            @PathVariable Long filiereId) {
+        long count = stageService.countStagesByYearAndFiliereIdAndEncadrantIsNull(year, filiereId);
+        return ResponseEntity.ok(count);
+    }
 
 }

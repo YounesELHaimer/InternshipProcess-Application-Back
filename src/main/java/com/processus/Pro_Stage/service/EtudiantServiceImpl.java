@@ -80,6 +80,7 @@ public class EtudiantServiceImpl implements EtudiantService {
                 etudiant.setCNE(data[3]);
                 etudiant.setCIN(data[4]);
 
+
                 // Set the filière ID
                 Filiere filiere = filiereRepository.findById(filiereId)
                         .orElseThrow(() -> new RuntimeException("Filière not found")); // Handle this exception according to your needs

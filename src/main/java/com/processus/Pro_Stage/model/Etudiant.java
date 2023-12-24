@@ -1,12 +1,15 @@
 package com.processus.Pro_Stage.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 @Table
 public class Etudiant {
@@ -36,6 +39,8 @@ public class Etudiant {
         @Column(nullable = false)
         private String motDePasse;
 
+        @Column(nullable = false)
+        private String codeApogee;
 
 
         public Etudiant() {
@@ -68,6 +73,7 @@ public class Etudiant {
                 this.CIN = CIN;
         }
         // Ajoutez la relation avec la classe Stage
+        @JsonIdentityReference(alwaysAsId = true)
         @OneToMany(mappedBy = "etudiant")
         private Set<Stage> stages;
         // Ajout de la relation Many-to-One avec Filiere
@@ -84,7 +90,7 @@ public class Etudiant {
         }
 
 
-        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, Filiere filiere , String Niveau) {
+        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, Filiere filiere , String codeApogee, String Niveau) {
                 this.id = id;
                 Nom = nom;
                 Prenom = prenom;
@@ -94,11 +100,10 @@ public class Etudiant {
                 this.Niveau = Niveau;
                 this.filiere = filiere;
                 this.motDePasse = generateRandomPassword();
+                this.codeApogee = codeApogee;
         }
 
-        public String getNiveau() {
-                return Niveau;
-        }
+
 
         public void setNiveau(String niveau) {
                 Niveau = niveau;
