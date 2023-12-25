@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class EtudiantServiceImpl implements EtudiantService {
@@ -30,10 +31,23 @@ public class EtudiantServiceImpl implements EtudiantService {
     }
 
     @Override
-    public Etudiant addEtudiant(Etudiant Etudiant) {
-        return etudiantRepository.save(Etudiant);
+    public Etudiant addEtudiant(Etudiant etudiant) {
+        Random random = new Random();
+        int randomNumber = 10000 + random.nextInt(90000);
+        etudiant.setStageTrouver(false);
+        etudiant.setMotDePasse(String.valueOf(randomNumber));
+
+        return etudiantRepository.save(etudiant);
+    }
+    public int getNombreEtudiantsSansStage(Long filiereId) {
+        List<Etudiant> etudiantsSansStage = etudiantRepository.findByFiliereIdAndStageTrouver(filiereId, false);
+        return etudiantsSansStage.size();
     }
 
+    public int getNombreEtudiantsAvecStage(Long filiereId) {
+        List<Etudiant> etudiantsAvecStage = etudiantRepository.findByFiliereIdAndStageTrouver(filiereId, true);
+        return etudiantsAvecStage.size();
+    }
     @Override
     public List<Etudiant> getEtudiant() {
         return (List<Etudiant>) etudiantRepository.findAll();
@@ -70,6 +84,9 @@ public class EtudiantServiceImpl implements EtudiantService {
             reader.readLine();
 
             while ((line = reader.readLine()) != null) {
+                Random random = new Random();
+                int randomNumber = 10000 + random.nextInt(90000);
+
                 String[] data = line.split(",");
 
                 // Map CSV columns to Etudiant fields
@@ -79,6 +96,11 @@ public class EtudiantServiceImpl implements EtudiantService {
                 etudiant.setEmail(data[2]);
                 etudiant.setCNE(data[3]);
                 etudiant.setCIN(data[4]);
+                etudiant.setNiveau(data[5]);
+                etudiant.setStageTrouver(false);
+                etudiant.setMotDePasse(String.valueOf(randomNumber));
+                etudiant.setCodeApogee(data[5]);
+
 
 
                 // Set the filière ID

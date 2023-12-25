@@ -19,4 +19,6 @@ public interface EtudiantService {
 
     public void deleteEtudiant(int id);
     void importEtudiantsFromCSV(MultipartFile file , Long filiereId);
+    public int getNombreEtudiantsSansStage(Long filiereId);
+    public int getNombreEtudiantsAvecStage(Long filiereId);
 }

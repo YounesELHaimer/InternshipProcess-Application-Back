@@ -1,6 +1,7 @@
 package com.processus.Pro_Stage.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,6 +41,15 @@ public class Stage {
     @Temporal(TemporalType.DATE)
     private Date dateFin;
 
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date dateSoutenance = new Date("01/09/2024"); // Set to the current date as default
+
+
+    public void setDateSoutenance(Date dateSoutenance) {
+        this.dateSoutenance = dateSoutenance;
+    }
+
     @ManyToOne
     @JoinColumn(name = "etudiant_id")
     private Etudiant etudiant;
@@ -62,7 +72,7 @@ public class Stage {
         // Default constructor
     }
 
-    public Stage(String sujet, String organismeDaccueil, String type,String annee, Date dateDeDebut, Date dateFin, Etudiant etudiant, Professeur encadrant, Set<Professeur> jurys) {
+    public Stage(String sujet, String organismeDaccueil, String type,String annee, Date dateDeDebut, Date dateFin, Date dateSoutenance, Etudiant etudiant, Professeur encadrant, Set<Professeur> jurys) {
         this.sujet = sujet;
         this.organismeDaccueil = organismeDaccueil;
         this.type = type;
@@ -72,6 +82,7 @@ public class Stage {
         this.encadrant = encadrant;
         this.jurys = jurys;
         this.annee = annee;
+        this.dateSoutenance = dateSoutenance;
     }
 
     public void setEncadrant(Professeur encadrant) {
