@@ -23,9 +23,18 @@ public interface StageRepository extends JpaRepository<Stage, Long>{
             "ORDER BY s.id")
     List<Stage> findTopNStagesByYearAndUnassigned(@Param("year") String year, @Param("filiereId") Long filiereId, Pageable pageable);
 
-
-    long countByAnneeAndEtudiantFiliereId(String year, long filiereId);
     long countByAnneeAndEtudiantFiliereIdAndEncadrantIsNull(String year, Long filiereId);
+    long countByAnneeAndEtudiantFiliereId(String year, long filiereId);
+
+
+    @Query("SELECT s FROM Stage s " +
+            "JOIN s.etudiant e " +
+            "JOIN e.filiere f " +
+            "WHERE s.annee = :year AND f.id = :filiereId " +
+            "ORDER BY s.id")
+    List<Stage> findTopNStagesByYear(@Param("year") String year, @Param("filiereId") Long filiereId, Pageable pageable);
+
+    long countByAnneeAndEtudiantFiliereIdAndJurysIsNull(String year, Long filiereId);
 
 
 

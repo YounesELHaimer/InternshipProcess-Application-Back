@@ -5,6 +5,8 @@ import com.processus.Pro_Stage.repository.FiliereRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FiliereServiceImpl implements FiliereService {
 
@@ -21,4 +23,8 @@ public class FiliereServiceImpl implements FiliereService {
     }
 
     // Implement other methods if needed
+    @Override
+    public List<Object[]> countEtudiantsByNiveau(Long filiereId) {
+        return filiereRepository.countEtudiantsByNiveau(filiereId);
+    }
 }

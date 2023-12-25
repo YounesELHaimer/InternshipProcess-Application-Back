@@ -156,7 +156,17 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+    @GetMapping("nombreSansStage/{filiereId}")
+    public ResponseEntity<Integer> getNombreEtudiantsSansStage(@PathVariable Long filiereId) {
+        int nombreEtudiantsSansStage = etudiantService.getNombreEtudiantsSansStage(filiereId);
+        return ResponseEntity.ok(nombreEtudiantsSansStage);
+    }
 
+    @GetMapping("nombreAvecStage/{filiereId}")
+    public ResponseEntity<Integer> getNombreEtudiantsAvecStage(@PathVariable Long filiereId) {
+        int nombreEtudiantsAvecStage = etudiantService.getNombreEtudiantsAvecStage(filiereId);
+        return ResponseEntity.ok(nombreEtudiantsAvecStage);
+    }
     @GetMapping("stages/etudiant/{etudiantId}")
     public List<Stage> getStagesByEtudiantId(@PathVariable("etudiantId") int id) {
         return stageService.getStagesByEtudiantId(id);
@@ -182,7 +192,10 @@ public class ClientController {
     }
     @Autowired
     private ProfesseurService professeurService;
-
+    @GetMapping("/{filiereId}/statsByNiveau")
+    public List<Object[]> countEtudiantsByNiveau(@PathVariable Long filiereId) {
+        return filiereService.countEtudiantsByNiveau(filiereId);
+    }
     @GetMapping("professeurs")
     public List<Professeur> getAllProfesseurs() {
         return professeurService.getAllProfesseurs();
@@ -238,5 +251,28 @@ public class ClientController {
         long count = stageService.countStagesByYearAndFiliereIdAndEncadrantIsNull(year, filiereId);
         return ResponseEntity.ok(count);
     }
+
+    // Inside StageController
+    @PostMapping("/stages/assign/juries/{filiereId}")
+    public ResponseEntity<String> assignJuriesToStages(
+            @PathVariable Long filiereId,
+            @RequestParam List<Long> juryIds,
+            @RequestParam String year) {
+        try {
+            stageService.assignJuriesToStages(juryIds, year, filiereId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @GetMapping("/stages/count/null-jury/{filiereId}")
+    public ResponseEntity<Long> countStagesWithNullJury(
+            @RequestParam String year,
+            @PathVariable Long filiereId) {
+        long count = stageService.countStagesWithNullJury(year, filiereId);
+        return ResponseEntity.ok(count);
+    }
+
+
 
 }

@@ -16,8 +16,11 @@ public interface StageService {
     public List<Stage> getStagesByEtudiantId(int id);
     long countStagesByYearAndFiliereId(String year, Long filiereId);
     long countStagesByYearAndFiliereIdAndEncadrantIsNull(String year, Long filiereId);
+    void assignJuriesToStages(List<Long> juryIds, String year, Long filiereId);
 
     public void assignStagesToEncadrants(List<Long> encadrantIds, String year, Long filiereId) ;
+
+    long countStagesWithNullJury(String year, Long filiereId);
 
     void updateStage(Long id, Stage stage);
 }

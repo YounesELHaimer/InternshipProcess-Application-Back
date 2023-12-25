@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +78,63 @@ public class StageServiceImpl implements StageService{
             startIndex = endIndex;
         }
     }
+
+    // Inside StageServiceImpl
+    @Override
+    public void assignJuriesToStages(List<Long> juryIds, String year, Long filiereId) {
+        // Get the total number of stages for the given year and filiereId
+        long totalStages = stageRepository.countByAnneeAndEtudiantFiliereId(year, filiereId);
+
+        if (totalStages == 0) {
+            throw new RuntimeException("No stages found for the specified year and filiere");
+        }
+
+        // Ensure that there are at least two jurors available
+        if (juryIds.size() < 2) {
+            throw new RuntimeException("Not enough jurors available for assignment");
+        }
+
+        // Shuffle the list of jurors to randomize the assignment
+        Collections.shuffle(juryIds);
+
+        // Create a list to store the stages for assignment
+        List<Stage> stagesToAssign = stageRepository.findTopNStagesByYear(year, filiereId, PageRequest.of(0, (int) totalStages));
+
+        // Identify stages that need additional jurors
+        List<Stage> stagesWithLessThanTwoJurys = new ArrayList<>();
+        for (Stage stage : stagesToAssign) {
+            if (stage.getJurys().size() < 2) {
+                stagesWithLessThanTwoJurys.add(stage);
+            }
+        }
+
+        // Iterate through the stages and assign additional jurors if needed
+        int jurorIndex = 0;
+        for (Stage stage : stagesWithLessThanTwoJurys) {
+            for (int i = stage.getJurys().size(); i < 2; i++) {
+                if (jurorIndex < juryIds.size()) {
+                    Long jurorId = juryIds.get(jurorIndex);
+                    Professeur juror = professeurRepository.findById(jurorId)
+                            .orElseThrow(() -> new RuntimeException("Juror not found"));
+
+                    stage.getJurys().add(juror);
+                    jurorIndex++;
+                }
+            }
+        }
+
+        // Save the stages with the assigned jurors
+        stageRepository.saveAll(stagesToAssign);
+    }
+
+    @Override
+    public long countStagesWithNullJury(String year, Long filiereId) {
+        return stageRepository.countByAnneeAndEtudiantFiliereIdAndJurysIsNull(year, filiereId);
+    }
+
+
+
+
 
     @Override
     public void updateStage(Long id, Stage updatedStage) {
