@@ -10,4 +10,5 @@ public interface EtudiantRepository extends CrudRepository<Etudiant,Integer> {
     Etudiant findEtudiantByEmailAndMotDePasse(String email, String motDePasse);
     Etudiant findEtudiantById(int id);
 
+
 }
