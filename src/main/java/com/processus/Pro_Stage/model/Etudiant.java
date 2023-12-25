@@ -50,36 +50,22 @@ public class Etudiant {
 
         }
 
-        public void setId(int id) {
+        public Etudiant(int id, String nom, String prenom, String CNE, String email, String CIN, String niveau, String motDePasse, Set<Stage> stages, Filiere filiere) {
                 this.id = id;
-        }
-
-        public void setNom(String nom) {
                 Nom = nom;
-        }
-
-        public void setPrenom(String prenom) {
                 Prenom = prenom;
-        }
-
-        public void setCNE(String CNE) {
                 this.CNE = CNE;
-        }
-
-        public void setEmail(String email) {
                 this.email = email;
-        }
-
-
-
-        public void setCIN(String CIN) {
                 this.CIN = CIN;
+                Niveau = niveau;
+                this.motDePasse = motDePasse;
+                this.stages = stages;
+                this.filiere = filiere;
         }
-        // Ajoutez la relation avec la classe Stage
         @JsonIdentityReference(alwaysAsId = true)
         @OneToMany(mappedBy = "etudiant")
         private Set<Stage> stages;
-        // Ajout de la relation Many-to-One avec Filiere
+
         @ManyToOne
         @JoinColumn(name = "filiere_id")
         private Filiere filiere;

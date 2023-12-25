@@ -14,4 +14,5 @@ public interface EtudiantRepository extends CrudRepository<Etudiant,Integer> {
     List<Etudiant> findByFiliereIdAndStageTrouver(Long filiereId, boolean stageTrouver);
 
 
+
 }
