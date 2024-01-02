@@ -29,6 +29,7 @@ public class StageServiceImpl implements StageService{
 
     @Override
     public Stage addStage(Stage stage) {
+        stage.getEtudiant().setStageTrouver(true);
         return stageRepository.save(stage);
     }
 
